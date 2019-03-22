@@ -1,0 +1,25 @@
+sudo: required
+
+services:
+  - docker
+
+env:
+  global:
+    - REGISTRY_USER=apalkoff
+    # REGISTRY_PASS=...
+    - secret: "a3TN+O83tVYor/4qprZq+XY5/273/A4/KyU/DIPOWBZGfQ1vEH9wWJppj8/myHCrhqq4Ghc6P7pCy1FtDQS7IOQiyOY5MIRPj/nMWOtUg2q5ClLxXJNkjzeWmUOx/F7prNgKAryM7l+wKCvkRGL27NJqb8XProOeJpQmni7pHryeNjZOebQ94yet9o71HqSRgIBnozfX3BaaPOyNIdT913I3NUD958ToSsUTdTXTEA6p4TaB00eVp8LgUPNFiIwJ8VCp8kY6ikfK4sAvne88/ta3nUmBpxqLPF4fDyGzm8v69YdCw8hx9jWwYxNK67ZSylMnGMRKCyUHGfif7d8II8AAUuNFJrR+DmtY6VFVzW8Y1Ag9vNUlKSY+nPgAuaDqHZ1lPn9lMuUTOdYsmZq5UGfL9vqIGFJT8dt5ELJKI47USm346afZEi1gPsOTElwe2JFTqLE8DKTHDcy6aoF9ZjT1dxD194ENREiLHZ0raRUtjd9eUFOCKNohLxfeTZCsE+muQiBhULNthqGpqavolK4HcQmI2B5trGbUG5wVDOezQS9GbwyKUBOT2k83kpY7HzSuTahlzDw9xUAl/QT2YYbQuqZfr8MQaK7FPZrwkHZHAVm9NpusesJeAXV5vTJdueCjY8c0nlHgHCKd98R4agHq9wT0/pH+B7NW0v7BFFo="
+
+script:
+  - docker build -t chatscript  .
+
+before_deploy:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+
+deploy:
+  provider: script
+  script: >-
+    docker tag chatscript:latest $DOCKER_USERNAME/chatscript:latest &&
+    docker tag chatscript:latest $DOCKER_USERNAME/chatscript:$(docker run --rm  chatscript:latest cat version.txt | awk '{print $2}') &&
+    docker push apalkoff/chatscript
+  on:
+    branch: master
