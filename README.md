@@ -20,7 +20,7 @@ Follow [these instructions](https://docs.docker.com/engine/installation/) to get
 > docker-compose up
 ```
 
-And ChatScript should be accessible via 'localhost:1024'.
+And ChatScript should be accessible via `localhost:7314`.
 
 Note: if you have not pulled any of the images from the repository, when you do an `up`, it will attempt to build from scratch!
 
