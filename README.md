@@ -27,7 +27,7 @@ Note: if you have not pulled any of the images from the repository, when you do 
 ### To pull the latest images to your machine:
 
 ```
-docker pull random-mud-pie/docker-chatscript
+docker pull randommudpie/docker-chatscript
 ```
 
 Or just `docker-compose pull`.
