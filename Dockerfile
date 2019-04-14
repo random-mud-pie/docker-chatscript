@@ -12,6 +12,7 @@ RUN apt-get update && \
     rm -rf  .git \
         BINARIES/*.exe \
         BINARIES/*.dll \
+        SRC \
         PDFDOCUMENTATION \
         WIKI \
         PAPERS \
