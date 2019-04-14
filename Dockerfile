@@ -1,45 +1,26 @@
-FROM debian:jessie-slim as build-chatscript
-
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-    git \
-    build-essential \
-    libghc-curl-dev \
-    ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN git clone https://github.com/ChatScript/ChatScript /app/ChatScript
-
-WORKDIR /app/ChatScript
-
-RUN make -C ./SRC server -j 4
-
-RUN ./BINARIES/ChatScript local build0=files0.txt
-
-#remove unused parts (gitrepo, windows binaries, unused dicts)
-RUN rm -rf  .git \
-            BINARIES/*.exe \
-            BINARIES/*.dll \
-            DICT/PORTUGUESE \
-            DICT/GERMAN \ 
-            DICT/FRENCH \
-            DICT/ITALIAN \
-            DICT/DUTCH \
-            DICT/SPANISH \
-            SRC \
-            PDFDOCUMENTATION \
-            WIKI \
-            PAPERS \
-            HTMLDOCUMENTATION
-
 FROM debian:jessie-slim
+MAINTAINER Talmai Oliveira <to@talm.ai>
+ENV REFRESHED_AT 2019-4-13 (CS 9.2 Release)
 
-LABEL maintainer="ilya@apalkoff.ru"
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends git build-essential libghc-curl-dev ca-certificates curl && \
+    rm -rf /var/lib/apt/lists/* && \
+    git clone https://github.com/ChatScript/ChatScript /app/ChatScript && \
+    cd /app/ChatScript && \
+    make -j 4 -C ./SRC server && \
+    ./BINARIES/ChatScript local build0=files0.txt && \
+    rm -rf  .git \
+        BINARIES/*.exe \
+        BINARIES/*.dll \
+        SRC \
+        PDFDOCUMENTATION \
+        WIKI \
+        PAPERS \
+        HTMLDOCUMENTATION \
+        /var/lib/apt/lists/*
 
-COPY --from=build-chatscript /app /app
 WORKDIR /app/ChatScript
 
-RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
+EXPOSE 7314
 
-EXPOSE 1024
-CMD ["./BINARIES/ChatScript", "port=1024"]
+CMD ["./BINARIES/ChatScript", "port=7314"]

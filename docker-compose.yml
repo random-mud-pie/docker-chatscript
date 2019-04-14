@@ -1,0 +1,17 @@
+# Usage:
+# docker-compose build && docker-compose up
+version: '2'
+
+services:
+  chatscript:
+    image: randommudpie/docker-chatscript
+    build:
+      context: .
+      dockerfile: Dockerfile
+    expose:
+      - 7314
+    volumes:
+      - database:/www
+    container_name: chatscript
+volumes:
+  database:
