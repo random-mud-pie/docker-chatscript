@@ -1,6 +1,6 @@
 FROM debian:jessie-slim
 MAINTAINER Talmai Oliveira <to@talm.ai>
-ENV REFRESHED_AT 2019-4-13 (CS 9.2 Release)
+ENV REFRESHED_AT 2019-8-16 (CS 9.6.1 Release)
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends git build-essential libghc-curl-dev ca-certificates curl && \
